@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from  '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { MovieResponse } from './interfaces/movies-search-response';
 import { Movie } from './interfaces/movie';
 import { BehaviorSubject } from 'rxjs';
@@ -16,8 +16,10 @@ export class MoviesService {
   constructor(private httpClient: HttpClient) {}
 
   fetchMovies(query: any) {
+    this.moviesGroupsByYear$.next([]);
     return this.httpClient.get(this.MOVIES_URL, { params: query })
       .pipe(
+        delay(500),
         map((res: any) => {
           if (res.Search) {
             const movies = this.mapResponseToMovies(res.Search);

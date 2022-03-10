@@ -1,40 +1,49 @@
 <div class="movies-list-wrapper">
-  <div *ngFor="let moviesList of moviesGroupsByYear">
-    <div class="tags are-large">
-      <span class="tag">{{moviesList[0].year}}</span>
-    </div>
-    <div class="movies-list">
-      <div *ngFor="let movie of moviesList" class="movie">
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img
-                *ngIf="movie.poster && movie.poster !== 'N/A'"
-                [src]="movie.poster" alt="Placeholder image">
-              <img
-                *ngIf="!movie.poster || movie.poster === 'N/A'"
-                src="https://bulma.io/images/placeholders/1280x960.png"
-                [alt]="movie.title">
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">{{ movie.title }}</p>
-                <p class="subtitle is-6">{{ movie.year }}</p>
+  <div *ngIf="!moviesGroupsByYear.length; else moviesList">
+    <h3 class="title is-3 has-text-centered">Sorry, no results found
+      <span class="icon has-text-primary">
+        <i class="fas fa-sad-cry"></i>
+      </span>
+    </h3>
+  </div>
+  <ng-template #moviesList>
+    <div *ngFor="let moviesList of moviesGroupsByYear">
+      <div class="tags are-large">
+        <span class="tag">{{moviesList[0].year}}</span>
+      </div>
+      <div class="movies-list">
+        <div *ngFor="let movie of moviesList" class="movie">
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img
+                  *ngIf="movie.poster && movie.poster !== 'N/A'"
+                  [src]="movie.poster" alt="Placeholder image">
+                <img
+                  *ngIf="!movie.poster || movie.poster === 'N/A'"
+                  src="https://bulma.io/images/placeholders/1280x960.png"
+                  [alt]="movie.title">
+              </figure>
+            </div>
+            <div class="card-content">
+              <div class="media">
+                <div class="media-content">
+                  <p class="title is-4">{{ movie.title }}</p>
+                  <p class="subtitle is-6">{{ movie.year }}</p>
+                </div>
               </div>
             </div>
+            <footer class="card-footer">
+              <a [href]="movie.imdbURL" target="_blank" class="card-footer-item">
+                Go to IMDb
+                <span class="icon is-medium has-text-warning">
+                  <i class="fab fa-2x fa-imdb"></i>
+                </span>
+              </a>
+            </footer>
           </div>
-          <footer class="card-footer">
-            <a [href]="movie.imdbURL" target="_blank" class="card-footer-item">
-              Go to IMDb
-              <span class="icon is-medium has-text-warning">
-                <i class="fab fa-2x fa-imdb"></i>
-              </span>
-            </a>
-          </footer>
         </div>
       </div>
     </div>
-  </div>
+  </ng-template>
 </div>
