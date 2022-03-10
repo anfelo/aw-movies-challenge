@@ -54,6 +54,7 @@ export class MoviesService {
         type: movie.Type,
         year: movie.Year,
         imdbID: movie.imdbID,
+        imdbURL: `https://www.imdb.com/title/${movie.imdbID}`
       };
     });
   }
