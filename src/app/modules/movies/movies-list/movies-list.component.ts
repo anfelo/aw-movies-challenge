@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Movie } from '../interfaces/movie';
+import { MoviesService } from '../movies.service';
 
 @Component({
   selector: 'movies-list',
@@ -6,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./movies-list.component.scss']
 })
 export class MoviesListComponent implements OnInit {
-  constructor() { }
+  moviesList: Movie[] = ([] as Movie[]);
 
-  ngOnInit(): void { }
+  constructor(private moviesService: MoviesService) { }
+
+  ngOnInit(): void {
+    this.moviesService.moviesList$.subscribe(movies => {
+      this.moviesList = movies;
+    })
+  }
 }

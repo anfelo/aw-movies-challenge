@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { Movie } from '../interfaces/movie';
 import { MoviesService } from '../movies.service';
 
 @Component({
@@ -25,7 +26,9 @@ export class MoviesSearchComponent implements OnInit, OnDestroy {
         debounceTime(500),
         switchMap(query => this.moviesService.fetchMovies({ s: query.title }))
       )
-      .subscribe(res => console.log(res));
+      .subscribe((movies: Movie[]) => {
+        this.moviesService.moviesList$.next(movies);
+      });
   }
 
   ngOnDestroy(): void {
