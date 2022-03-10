@@ -14,6 +14,7 @@ export class MoviesListComponent implements OnInit {
 
   ngOnInit(): void {
     this.moviesService.moviesList$.subscribe(movies => {
+      console.log(movies);
       this.moviesList = movies;
     })
   }
