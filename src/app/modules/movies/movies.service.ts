@@ -16,7 +16,6 @@ export class MoviesService {
   constructor(private httpClient: HttpClient) {}
 
   fetchMovies(query: any) {
-    this.moviesGroupsByYear$.next([]);
     return this.httpClient.get(this.MOVIES_URL, { params: query })
       .pipe(
         delay(500),
@@ -27,6 +26,8 @@ export class MoviesService {
             this.groupMoviesByYear(movies);
             return movies;
           }
+          this.moviesList$.next([]);
+          this.moviesGroupsByYear$.next([]);
           return [];
         }),
       );
@@ -42,8 +43,8 @@ export class MoviesService {
       };
       worker.postMessage({ movies });
     } else {
-      const moviesGroupByYear = groupByYear(movies);
-      const moviesGroups = Object.values(moviesGroupByYear) as Movie[][];
+      const moviesGroupedByYear = groupByYear(movies);
+      const moviesGroups = Object.values(moviesGroupedByYear) as Movie[][];
       this.moviesGroupsByYear$.next(moviesGroups);
     }
   }
