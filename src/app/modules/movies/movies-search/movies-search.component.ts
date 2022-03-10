@@ -26,9 +26,7 @@ export class MoviesSearchComponent implements OnInit, OnDestroy {
         debounceTime(500),
         switchMap(query => this.moviesService.fetchMovies({ s: query.title }))
       )
-      .subscribe((movies: Movie[]) => {
-        this.moviesService.moviesList$.next(movies);
-      });
+      .subscribe();
   }
 
   ngOnDestroy(): void {

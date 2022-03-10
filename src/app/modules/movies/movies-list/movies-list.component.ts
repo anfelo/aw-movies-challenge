@@ -8,14 +8,13 @@ import { MoviesService } from '../movies.service';
   styleUrls: ['./movies-list.component.scss']
 })
 export class MoviesListComponent implements OnInit {
-  moviesList: Movie[] = ([] as Movie[]);
+  moviesGroupsByYear: Movie[][] = ([] as Movie[][]);
 
   constructor(private moviesService: MoviesService) { }
 
   ngOnInit(): void {
-    this.moviesService.moviesList$.subscribe(movies => {
-      console.log(movies);
-      this.moviesList = movies;
+    this.moviesService.moviesGroupsByYear$.subscribe(moviesGroups => {
+      this.moviesGroupsByYear = moviesGroups;
     })
   }
 }
