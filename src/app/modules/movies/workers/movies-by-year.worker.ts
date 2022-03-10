@@ -1,6 +1,8 @@
 /// <reference lib="webworker" />
 
+import { groupByYear } from '../helpers/group-movies-by-year';
+
 addEventListener('message', ({ data }) => {
-  const response = `worker response to ${data}`;
-  postMessage(response);
+  const moviesGroupByYear = groupByYear(data.movies);
+  postMessage(moviesGroupByYear);
 });

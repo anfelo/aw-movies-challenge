@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { MovieResponse } from './interfaces/movies-search-response';
 import { Movie } from './interfaces/movie';
 import { BehaviorSubject } from 'rxjs';
+import { groupByYear } from './helpers/group-movies-by-year';
 
 @Injectable()
 export class MoviesService {
@@ -30,27 +31,19 @@ export class MoviesService {
   }
 
   groupMoviesByYear(movies: Movie[]): void {
-    const moviesGroupByYear = movies.reduce((acc: any, curr: Movie) => {
-      if (!acc[curr.year]) {
-        acc[curr.year] = [curr];
-      } else {
-        acc[curr.year].push(curr);
-      }
-      return acc;
-    }, {});
-    const moviesGroups = Object.values(moviesGroupByYear) as Movie[][];
-    this.moviesGroupsByYear$.next(moviesGroups);
-    // if (typeof Worker !== 'undefined') {
-    //   // Create a new
-    //   const worker = new Worker('./workers/movies-by-year.worker', { type: 'module' });
-    //   worker.onmessage = ({ data }) => {
-    //     console.log(`page got message: ${data}`);
-    //   };
-    //   worker.postMessage({ movies });
-    // } else {
-    //   // Fallback if web workers are not supported
-
-    // }
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('./workers/movies-by-year.worker', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        const moviesGroups = Object.values(data) as Movie[][];
+        this.moviesGroupsByYear$.next(moviesGroups);
+        worker.terminate();
+      };
+      worker.postMessage({ movies });
+    } else {
+      const moviesGroupByYear = groupByYear(movies);
+      const moviesGroups = Object.values(moviesGroupByYear) as Movie[][];
+      this.moviesGroupsByYear$.next(moviesGroups);
+    }
   }
 
   private mapResponseToMovies(moviesRes: MovieResponse[]): Movie[] {
