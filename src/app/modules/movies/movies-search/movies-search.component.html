@@ -1,7 +1,14 @@
 <form [formGroup]="searchForm">
-  <input
-    class="input is-large"
-    type="text"
-    placeholder="Search movies by title..."
-    formControlName="title">
+
+  <div class="control has-icons-right">
+    <input
+      class="input is-large"
+      type="text"
+      placeholder="Search movies by title..."
+      formControlName="title">
+    <span class="icon is-medium is-right">
+      <i class="fas fa-search"></i>
+    </span>
+  </div>
+  
 </form>
